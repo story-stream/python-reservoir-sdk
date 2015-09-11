@@ -1,2 +1,2 @@
-DEFAULT_BASE_URL = 'http://127.0.0.1:80'
+DEFAULT_BASE_URL = 'http://res.storystream.it:3000'
 ARGUMENT_CONVERTED_KEY = 'respy_arguments_converted'
