@@ -44,7 +44,6 @@ class Client(object):
 
     def _request(self, method, path, **kwargs):
         params = kwargs.copy()
-        request_ctx = {}
 
         if method != 'get':
             data = params.get('data')
