@@ -17,14 +17,13 @@ class SocialAPI(object):
         self._client = client
         self._argument_converter = ArgumentConverter()
 
-    def all(self, story, network, keyword, q=None, older_than=None, newer_than=None,
+    def all(self, story, feeds, q=None, older_than=None, newer_than=None,
             limit=None, include_shares=False, order_by='-created_date', include_bounds=False, **kwargs):
         """
         Returns a collection of social content items from a network within the reservoir along with
         any matching meta data.
         :param story: The identifier for the story to retrieve items for.
-        :param network: The source social network for the items.
-        :param keyword: A keyword that represents the 'feed' that you wish to retrieve. e.g. #GaryIsAwesome
+        :param feeds: List of dictionary objects with format {type:"network", search:"term"} e.g. [{type:twitter, search:"#storystream"}].
         :param q: A class: 'reservoir.Query' object that indicates the criteria to filter the results by.
         :param older_than: Only fetch social items that are older than this date.
         :param newer_than: Only fetch social items that are newer than this date.
@@ -34,11 +33,9 @@ class SocialAPI(object):
         :param include_bounds: Include the older or newer than ID bound item in the results.
         :return: A collection of social items.
         """
-
-        network = network.lower()
         url = self._build_url(story)
         arguments = self._argument_converter(
-            feeds=u'{}{}'.format(network, keyword),
+            feeds=feeds,
             q=q,
             older=older_than,
             since=newer_than,
@@ -47,7 +44,7 @@ class SocialAPI(object):
             sort=order_by,
             include_bounds=include_bounds
         )
-
+       
         return self._client.get(url, **arguments)
 
     def delete(self, story, item_ids):

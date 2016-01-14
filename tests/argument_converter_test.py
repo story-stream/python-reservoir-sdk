@@ -29,7 +29,7 @@ class ArgumentConverterTest(TestCase):
             ARGUMENT_CONVERTED_KEY: True
         })
 
-    def test_converts_boolean_to_lowercase(self):
+    def test_doesnt_convert_boolean_to_lowercase(self):
         source_arguments = {
             'truthey': True,
             'falsey': False
@@ -38,8 +38,8 @@ class ArgumentConverterTest(TestCase):
         result = self.converter(**source_arguments)
 
         self.assertEqual(result, {
-            'truthey': 'true',
-            'falsey': 'false',
+            'truthey': True,
+            'falsey': False,
             ARGUMENT_CONVERTED_KEY: True
         })
 
@@ -56,7 +56,7 @@ class ArgumentConverterTest(TestCase):
             ARGUMENT_CONVERTED_KEY: True
         })
 
-    def test_ids_list_comma_seperated(self):
+    def test_ids_list_returned_as_ids_list(self):
         ids = [1, 2, 3, 4, 5]
         source_arguments = {
             'ids': ids
@@ -65,6 +65,6 @@ class ArgumentConverterTest(TestCase):
         result = self.converter(**source_arguments)
 
         self.assertEqual(result, {
-            'ids': '1,2,3,4,5',
+            'ids': [1,2,3,4,5],
             ARGUMENT_CONVERTED_KEY: True
         })

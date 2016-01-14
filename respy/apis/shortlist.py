@@ -17,14 +17,13 @@ class ShortlistAPI(object):
         self._client = client
         self._argument_converter = ArgumentConverter()
 
-    def all(self, story, network=None, keyword=None, q=None, older_than=None, newer_than=None,
+    def all(self, story, feeds, q=None, older_than=None, newer_than=None,
             limit=None, include_shares=False, order_by='-created_date', include_bounds=False, **kwargs):
         """
         Returns a collection of shortlisted content items from a network within the reservoir along with
         any matching meta data.
         :param story: The identifier for the story to retrieve items for.
-        :param network: The source social network for the items.
-        :param keyword: A keyword that represents the 'feed' that you wish to retrieve. e.g. #GaryIsAwesome
+        :param feeds: List of dictionary objects with format {type:"network", search:"term"} e.g. [{type:twitter, search:"#storystream"}].
         :param q: A class: 'reservoir.Query' object that indicates the criteria to filter the results by.
         :param older_than: Only fetch shortlisted items that are older than this date.
         :param newer_than: Only fetch shortlisted items that are newer than this date.
@@ -36,10 +35,6 @@ class ShortlistAPI(object):
         """
 
         url = self._build_url(story)
-        feeds = None
-        if network and keyword:
-            network = network.lower()
-            feeds = u'{}{}'.format(network, keyword)
 
         arguments = self._argument_converter(
             feeds=feeds,

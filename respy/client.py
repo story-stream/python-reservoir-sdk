@@ -44,27 +44,27 @@ class Client(object):
 
     def _request(self, method, path, **kwargs):
         params = kwargs.copy()
+        request_ctx = {}
 
         if method != 'get':
             data = params.get('data')
             if data:
-                data = json.dumps(data)
+                #data = json.dumps(data)
                 del params['data']
         else:
-            data = None
+            data = params
 
-        if not params.get(ARGUMENT_CONVERTED_KEY):
-            params = self._argument_converter(**params)
+        if not data.get(ARGUMENT_CONVERTED_KEY):
+            data = self._argument_converter(**data)
 
-        if ARGUMENT_CONVERTED_KEY in params:
-            del params[ARGUMENT_CONVERTED_KEY]
+        if ARGUMENT_CONVERTED_KEY in data:
+            del data[ARGUMENT_CONVERTED_KEY]
 
         response = requests.request(
             method=method,
             url=self._build_url(path),
             headers=self._build_headers(),
-            params=params,
-            data=data
+            json=data
         )
         return self._parse_response(response)
 
