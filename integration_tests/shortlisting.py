@@ -120,35 +120,25 @@ class ShortlistItemTestCase(BaseTestCase):
                     has_ended = True
             return pages
 
-        actual_pages = get_paged_data(True)
-
         # now lets go back up from the start of the last page
-        since = expected_pages[-1][0]['_id']
-        print 'Since Id: ', since
-        print expected_pages[-1][0]['created_date']
-
-        reverse_pages = get_paged_data(False, newer_than=since)
-
+        since = expected_pages[-1][0]
+        reverse_pages = get_paged_data(False, newer_than=since['timestamp'])
         def compare(expected, actual):
-            print 'Page'
             for i in range(0, len(expected)):
-                print expected[i]['created_date']
-                print actual[i]['created_date']
                 self.assertEqual(expected[i]['_id'], actual[i]['_id'])
 
         compare(expected_pages[-2], reverse_pages[0])
-        compare(expected_pages[2], reverse_pages[1])
-        compare(expected_pages[1], reverse_pages[2])
-        compare(expected_pages[0], reverse_pages[3])
+        compare(expected_pages[-3], reverse_pages[1])
+        compare(expected_pages[-4], reverse_pages[2])
 
     def _get_social(self, *keys, **kwargs):
         response = self.client.social.all(self.story_id, [
-            {'type': 'twitter', 'search': '#spacewalk'}
+            {'type': 'twitter', 'search': '#bluemonday'}
         ], **kwargs)
         return self.parser.extract_data(response, *keys)
 
     def _get_shortlist(self, *keys, **kwargs):
         response = self.client.shortlist.all(self.story_id, [
-            {'type': 'twitter', 'search': '#spacewalk'}
+            {'type': 'twitter', 'search': '#bluemonday'}
         ], **kwargs)
         return self.parser.extract_data(response, *keys)

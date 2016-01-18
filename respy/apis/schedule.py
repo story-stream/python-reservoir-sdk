@@ -19,7 +19,7 @@ class ScheduleAPI(object):
 
     def all(self, story, feeds, q=None, categories=None, tags=None,
             older_than=None, newer_than=None, limit=None, include_shares=False,
-            order_by='scheduled_date', include_bounds=False, **kwargs):
+            order_by='scheduled_timestamp', include_bounds=False, **kwargs):
         """
         Returns a collection of scheduled content items from a network within the reservoir along with
         any matching meta data.
