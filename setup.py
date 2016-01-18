@@ -19,7 +19,7 @@ packages = find_packages(exclude=['ex_setup'])
 
 setup(
     name='respy',
-    version='1.0.3',
+    version='1.1.0',
     author='StoryStream',
     author_email='hello@storystream.it',
     description='Respy is a python library for communication with the Reservoir APIs',

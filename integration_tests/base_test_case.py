@@ -6,7 +6,7 @@ class ResponseParser(object):
     @staticmethod
     def extract_data(response, *keys):
         if not keys:
-            return response['results']
+            return response
 
         data = []
         for record in response['results']:
