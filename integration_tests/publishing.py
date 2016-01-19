@@ -1,18 +1,24 @@
 from __future__ import division
-from datetime import datetime, timedelta
-from base_test_case import BaseTestCase
+from datetime import datetime
+from base_integration import BaseIntegration
 
 
-class PublishItemTestCase(BaseTestCase):
+class PublishIntegration(BaseIntegration):
+    def _get_endpoint_for_integration(self):
+        return self.client.publish
+
     def setUp(self):
-        super(PublishItemTestCase, self).setUp()
+        super(PublishIntegration, self).setUp()
         self.story_id = 1
-    
+
     def test_can_publish_an_item_from_shortlisted(self):
         self.assertEqual(1, 2)
 
     def test_can_publish_an_item_which_hasnt_been_touched(self):
-        items = self._get_social('_id')
+        items = self.get_only_keys(self.story_id,
+                                   '_id',
+                                   endpoint='social')
+
         social_item = items[0]['_id']
 
         self.client.publish.add(self.story_id, [{
@@ -32,7 +38,10 @@ class PublishItemTestCase(BaseTestCase):
         self.assertEqual(1, 2)
 
     def test_can_unpublish_item(self):
-        items = self._get_social('_id')
+        items = self.get_only_keys(self.story_id,
+                                   '_id',
+                                   endpoint='social')
+
         social_item = items[0]['_id']
 
         self.client.publish.add(self.story_id, [{
@@ -53,24 +62,6 @@ class PublishItemTestCase(BaseTestCase):
 
         self.assertEqual(pub_item['_id'], social_item)
         self.assertEqual(pub_item.meta['is_published'], False)
-
-    def _get_social(self, *keys, **kwargs):
-        response = self.client.social.all(self.story_id, [
-            {'type': 'twitter', 'search': '#bluemonday'}
-        ], **kwargs)
-        return self.parser.extract_data(response, *keys)
-
-    def _get_shortlist(self, *keys, **kwargs):
-        response = self.client.shortlist.all(self.story_id, [
-            {'type': 'twitter', 'search': '#bluemonday'}
-        ], **kwargs)
-        return self.parser.extract_data(response, *keys)
-
-    def _get_published(self, *keys, **kwargs):
-        response = self.client.publish.all(self.story_id, [
-            {'type': 'twitter', 'search': '#bluemonday'}
-        ], **kwargs)
-        return self.parser.extract_data(response, *keys)
 
     def __totimestamp(self, dt, epoch=datetime(1970,1,1)):
         td = dt - epoch

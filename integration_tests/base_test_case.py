@@ -35,7 +35,7 @@ class BaseTestCase(unittest.TestCase):
 
         self.steps_to_undo = []
 
-    def reverse_on_tear_down(self, func, *args, **kwargs):
+    def _reverse_on_tear_down(self, func, *args, **kwargs):
         calling_object = re.search(r'\.(?P<endpoint>[a-z]+)$', func.im_self.__module__).groupdict().get('endpoint')
         inverse_method = 'add' if func.__name__ == 'delete' else 'delete'
 

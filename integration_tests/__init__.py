@@ -1,1 +1,0 @@
-from shortlisting import ShortlistItemTestCase
