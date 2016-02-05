@@ -15,7 +15,7 @@ class ClientGetTest(HttpTestCase):
 
         messages = client.get('/social')
 
-        self.assertEqual(messages.messages, ["first", "second"])    
+        self.assertEqual(messages.messages, ["first", "second"])
 
     def test_get_uses_default_base_url(self):
         self.stub_get_requests()
@@ -63,7 +63,7 @@ class ClientGetTest(HttpTestCase):
 
         self.assert_get_request(
             url="http://res.storystream.it:3000/social",
-            params={"include-shares": 'true'},
+            json={"include-shares": True},
         )
 
     def test_get_handles_invalid_access_token_responses(self):

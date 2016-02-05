@@ -17,15 +17,17 @@ class PublishAPI(object):
         self._client = client
         self._argument_converter = ArgumentConverter()
 
-    def all(self, story, network=None, keyword=None, q=None, older_than=None, newer_than=None,
-            limit=None, include_shares=False, order_by='-created_date', include_bounds=False, **kwargs):
+    def all(self, story, feeds, q=None, categories=None, tags=None,
+            older_than=None, newer_than=None, limit=None, include_shares=False,
+            order_by='-published_timestamp', include_bounds=False, **kwargs):
         """
         Returns a collection of published content items from a network within the reservoir along with
         any matching meta data.
         :param story: The identifier for the story to retrieve items for.
-        :param network: The source social network for the items.
-        :param keyword: A keyword that represents the 'feed' that you wish to retrieve. e.g. #GaryIsAwesome
+        :param feeds: List of dictionary objects with format {type:"network", search:"term"} e.g. [{type:twitter, search:"#storystream"}].
         :param q: A class: 'reservoir.Query' object that indicates the criteria to filter the results by.
+        :param categories: list of strings containing categories to filter by
+        :param tags: list of strings containing tags to filter by
         :param older_than: Only fetch published items that are older than this date.
         :param newer_than: Only fetch published items that are newer than this date.
         :param limit: Only fetch this number of social items.
@@ -36,14 +38,12 @@ class PublishAPI(object):
         """
 
         url = self._build_url(story)
-        feeds = None
-        if network and keyword:
-            network = network.lower()
-            feeds = u'{}{}'.format(network, keyword)
 
         arguments = self._argument_converter(
             feeds=feeds,
             q=q,
+            categories=categories,
+            tags=tags,
             older=older_than,
             since=newer_than,
             limit=limit,
