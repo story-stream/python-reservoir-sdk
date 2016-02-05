@@ -21,8 +21,8 @@ class ArgumentConverter(object):
                 del converted_args[key]
                 converted_args[formatted_key] = value
 
-            if isinstance(value, bool):
-                converted_args[formatted_key] = str(value).lower()
+            # if isinstance(value, bool):
+            #     converted_args[formatted_key] = str(value).lower()
 
             if key == 'q' and value:
                 if isinstance(value, list):
@@ -31,7 +31,7 @@ class ArgumentConverter(object):
                     converted_args[formatted_key] = value
 
             if key == 'ids' and value:
-                converted_args[formatted_key] = ','.join([str(item_id) for item_id in value])
+                converted_args[formatted_key] = value #','.join([str(item_id) for item_id in value])
 
         converted_args[ARGUMENT_CONVERTED_KEY] = True
 
