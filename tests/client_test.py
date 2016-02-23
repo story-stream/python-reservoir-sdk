@@ -41,7 +41,7 @@ class ClientGetTest(HttpTestCase):
 
         self.assert_get_request(
             url="http://res.storystream.it:3000/users/123",
-            headers={'Content-Type': 'application/json', "Authorization": "Bearer abc123"},
+            headers={'Content-Type': 'application/json', "apikey": "abc123"},
         )
 
     def test_get_does_not_send_authorization_header_with_no_token(self):
@@ -81,10 +81,26 @@ class ClientGetTest(HttpTestCase):
         self.assertRaises(InvalidAccessTokenError, client.get, '/social')
 
     def test_get_handles_unauthorized_responses(self):
-        self.stub_get_requests(response_status=401)
+        self.stub_get_requests(
+            response_status=401,
+            response_body="""{
+                "message": "No API Key found in headers, body or querystring"
+             }""",
+        )
         client = Client(access_token="456efg")
 
         self.assertRaises(UnauthorizedError, client.get, '/social')
+
+    def test_get_handles_forbidden_responses(self):
+        self.stub_get_requests(
+            response_status=403,
+            response_body="""{
+                "message": "Invalid authentication credentials"
+             }""",
+        )
+        client = Client(access_token="456efg")
+
+        self.assertRaises(ForbiddenError, client.get, '/social')
 
     def test_get_handles_rate_limit_error_responses(self):
         self.stub_get_requests(response_status=429)
