@@ -3,6 +3,7 @@ import requests
 
 from constants import ARGUMENT_CONVERTED_KEY, DEFAULT_BASE_URL
 from errors import (
+    ForbiddenError,
     ResponseError,
     NotFoundError,
     InvalidAccessTokenError,
@@ -76,7 +77,7 @@ class Client(object):
         }
 
         if self._access_token:
-            headers['Authorization'] = u'Bearer {}'.format(self._access_token)
+            headers['apikey'] = self._access_token
 
         return headers
 
@@ -99,6 +100,8 @@ class Client(object):
             return InvalidAccessTokenError(response.reason)
         elif response.status_code == 401:
             return UnauthorizedError(response.reason)
+        elif response.status_code == 403:
+            return ForbiddenError(response.reason)
         elif response.status_code == 429:
             return RateLimitExceededError(response.reason)
         else:

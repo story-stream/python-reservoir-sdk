@@ -26,6 +26,14 @@ class UnauthorizedError(ResponseError):
     pass
 
 
+class ForbiddenError(ResponseError):
+    """
+    Raised when the Reservoir API responds with an HTTP 403 Forbidden error.
+    This may mean that the access token you are using is invalid or missing.
+    """
+    pass
+
+
 class InvalidAccessTokenError(ResponseError):
     """
     Raised when a request is made with an access token that has expired or has
