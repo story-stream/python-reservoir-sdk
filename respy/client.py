@@ -38,7 +38,14 @@ class Client(object):
         return self._request('post', path, **post_data)
 
     def put(self, path, **kwargs):
-        return self._request('put', path, **kwargs)
+        post_data = kwargs.copy()
+
+        if 'data' not in post_data:
+            post_data = {
+                'data': kwargs
+            }
+
+        return self._request('put', path, **post_data)
 
     def delete(self, path, **kwargs):
         return self._request('delete', path, **kwargs)
@@ -49,7 +56,6 @@ class Client(object):
         if method != 'get':
             data = params.get('data')
             if data:
-                #data = json.dumps(data)
                 del params['data']
         else:
             data = params
