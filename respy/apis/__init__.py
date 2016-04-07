@@ -1,3 +1,4 @@
+from brand import BrandAPI
 from category import CategoryAPI
 from items import ItemsAPI
 from publish import PublishAPI
