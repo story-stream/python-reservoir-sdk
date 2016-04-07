@@ -4,6 +4,7 @@ from mock import patch, Mock
 from respy import Reservoir
 from respy.client import Client
 from respy.reservoir import (
+    BrandAPI,
     CategoryAPI,
     ItemsAPI,
     PublishAPI,
@@ -156,3 +157,21 @@ class ReservoirTest(TestCase):
         )
 
         self.assertIsInstance(client, Client)
+
+    @patch('respy.reservoir.BrandAPI', spec=True)
+    @patch('respy.reservoir.Client', spec=True)
+    def test_tag_returns_a_brand_api_instance(self, mock_client, mock_brand_api):
+        reservoir = Reservoir(
+            access_token='zxy',
+            base_url='123'
+        )
+        brand = reservoir.brand
+
+        mock_client.assert_called_once_with(
+            access_token='zxy',
+            base_url='123'
+        )
+        mock_brand_api.assert_called_once_with(
+            client=mock_client()
+        )
+        self.assertIsInstance(brand, BrandAPI)
