@@ -6,7 +6,7 @@ Respy ("Res Pie") is the official Python SDK for interaction with the StoryStrea
 
 ```
 #!bash
-pip install hg+https://bitbucket.org/rhayesbite/python-reservoir-sdk
+pip install git+https://github.com/story-stream/python-reservoir-sdk.git
 ```
 
 
